@@ -33,7 +33,7 @@ function App() {
 
   useEffect( () =>{
     async function getProducts(){
-      let response = await axios.get("http://localhost:3001/products")
+      let response = await axios.get("https://productbackend-5lj2.onrender.com/products")
       // console.log(response.data)
       setProducts(response.data)
     }
