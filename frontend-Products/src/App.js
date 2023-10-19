@@ -51,7 +51,7 @@ setSelectedProduct(event.target.value)
 function Backend(event){
   event.preventDefault()
   async function BackEnd(){
-    let Home = await axios.put(`http://localhost:3001/products`)
+    let Home = await axios.put(`https://productbackend-5lj2.onrender.com/products`)
     
   }
 }
@@ -61,7 +61,7 @@ function Backend(event){
     event.preventDefault()
     async function DeleteProduct(){
       try{
-        let deletedItem = await axios.delete(`http://localhost:3001/products/${selectedProduct}`)
+        let deletedItem = await axios.delete(`https://productbackend-5lj2.onrender.com/products/${selectedProduct}`)
         let filterItem = Products.filter(arr =>{
           if(selectedProduct === arr._id){
             setCategory(arr.Category)
@@ -85,7 +85,7 @@ function Backend(event){
     event.preventDefault()
     async function Updateproduct(){
       try{
-        let UpdateThisItem = await axios.put(`http://localhost:3001/products/${selectedProduct}`)
+        let UpdateThisItem = await axios.put(`https://productbackend-5lj2.onrender.com/products/${selectedProduct}`)
       }catch(error){
      console.error(error)
       }
@@ -118,7 +118,7 @@ function Backend(event){
 
 
       try{
-       let added  = await axios.post("http://localhost:3001/products", {
+       let added  = await axios.post("https://productbackend-5lj2.onrender.com/products", {
         Title,
         Description,
         Image,
