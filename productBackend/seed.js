@@ -1,34 +1,38 @@
 // getting-started.js
-require("dotenv").config()
-const Product = require("./databasestuff/products")
 const mongoose = require('mongoose');
+const Product = require("./databasestuff/products")
+require("dotenv").config()
 
-async function seed(){
-    try{
-        console.log("hkdwbchw",process.env.LOCALDATABASE)
-        mongoose.connect(process.env.LOCALDATABASE,
+async function seed() {
+    try {
+        console.log("hkdwbchw", process.env.DATABASE_URL)
+        await mongoose.connect(process.env.DATABASE_URL,
+
             {
-                useNewUrlParser:true,
-                useUnifiedTopology:true
-                
+                useNewUrlParser: true,
+                useUnifiedTopology: true
 
-        })
+
+            })
 
         await Product.create({
-            Title:"Iphone",
-            Description:"Im rich",
-            Image:"http//",
-            Price:1000, 
-            Category:"electronics"
+            Title: "Iphone",
+            Description: "Im rich",
+            Image: "http//",
+            Price: 1000,
+            Category: "electronics"
         })
 
-        mongoose.disconnect()
+        // await mongoose.disconnect()
 
-    }catch(error){
-        console.error("cant connect to database",error)
-        mongoose.disconnect()
+    } catch (error) {
+        console.error("cant connect to database", error)
     }
+    finally{
+       mongoose.disconnect()
 
+    }
+    
 
 }
 seed()

@@ -3,17 +3,19 @@ const PORT = process.env.PORT || 3001
 const express = require("express")
 const app = express()
 const cors = require("cors")
-app.use(cors({origin:"http://localhost:3000"}))
+app.use(cors())
 const mongoose = require('mongoose');
 const Product = require("./databasestuff/products")
 app.use(express.json())
-app.use(express.urlencoded({ entended:true}))
+const seedData = require("./seed")
+// app.use(express.urlencoded({ entended:true}))
 
 app.get("/products",async (req,res) => {
+    console.log(process.env.DATABASE_URL,"heyyy , this is your datavase url")
 try{
-    await mongoose.connect(process.env.LOCALDATABASE)
+    await mongoose.connect(process.env.DATABASE_URL)
     let ProductFromDatabase = await Product.find({})
-    await mongoose.disconnect()
+    // await mongoose.disconnect()
     res.json(ProductFromDatabase)
 }catch(error){
     console.error(error.message)
@@ -27,7 +29,7 @@ app.post("/products",async (req,res) => {
     const {Title,Description,Image,Category} = req.body
     const Price = parseInt(req.body.Price)
 try{
-    await mongoose.connect(process.env.LOCALDATABASE)
+    await mongoose.connect(process.env.DATABASE_URL)
     let ProductFromDatabase = await Product.create({Title,Description,Image,Price,Category})
     await mongoose.disconnect()
     res.json(ProductFromDatabase)
@@ -40,7 +42,7 @@ try{
 
 app.delete("/products/:id",async (req,res) => {
 try{
-    await mongoose.connect(process.env.LOCALDATABASE)
+    await mongoose.connect(process.env.DATABASE_URL)
     let ProductFromDatabase = await Product.findByIdAndDelete(req.params.id)
     await mongoose.disconnect()
     res.json(ProductFromDatabase)
@@ -53,7 +55,7 @@ try{
 
 app.put("/products/:id",async (req,res) => {
     try{
-        await mongoose.connect(process.env.LOCALDATABASE)
+        await mongoose.connect(process.env.DATABASE_URL)
         const {Title,Description,Image,Price,Category} = req.body
         let ProductFromDatabase = await Product.findByIdAndUpdate(req.params.id,{Title,Description,Image,Price,Category}, { new: true })
         await mongoose.disconnect()
