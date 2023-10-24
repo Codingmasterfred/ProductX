@@ -12,13 +12,15 @@ function CardF(props){
 
     return ( 
     
-    <Card style={{ flex:"1",minWidth:"300px", justifyContent:"center"  }} onClick={onCardClick}>
+    <Card style={{ flex:"1",minWidth:"300px", height:"330px", justifyContent:"center"  }} onClick={onCardClick}>
     <p>{props.index}</p>
-  <Card.Img variant="top" src={props.arr.image} style={{height:"280px",objectFit:"contain"}}/>
+  <Card.Img variant="top" src={props.arr.Image} style={{height:"40%",objectFit:"contain"}}/>
   <Card.Body>
-    <Card.Title>{props.arr.title}</Card.Title>
+  <Card.Title>
+  {props.arr.Title.length > 30 ? props.arr.Title.slice(0, 40) + '...' : props.arr.Title}
+</Card.Title>
     <Card.Text>
-        ${props.arr.price}
+        ${props.arr.Price}
     { props.arr.amountInStock < 2 && 
     <Card.Text>
         There are only {props.arr.amountInStock} left in stock

@@ -1,32 +1,58 @@
 import CardF from "./card"
-import Data from "./data.json"
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import Container from 'react-bootstrap/Container';
 
 
 
 function Main(props) {
-  const electronics = Data.filter(arr => arr.category === "electronics");
-  const clothes = Data.filter(arr => arr.category === "clothes");
-  const books = Data.filter(arr => arr.category === "books");
-  const games = Data.filter(arr => arr.category === "games");
+  const electronics = props.LocalProductsArray.filter(arr => arr.Category === "electronics");
+  const clothes =  props.LocalProductsArray.filter(arr => arr.Category === "clothes");
+  const books = props.LocalProductsArray.filter(arr => arr.Category === "books");
+  const games = props.LocalProductsArray.filter(arr => arr.Category === "games");
+
+
+
 
   const [show, setShow] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [visibleIndex, setVisibleIndex] = useState(0);
-  const [enddisplay, setEnddisplay] = useState(3)
-  const [startDisplay, setStartDisplay] = useState(0)
+
+  useEffect(() => {
+    // Retrieve the cart from localStorage when the component mounts
+    const storedCart = JSON.parse(localStorage.getItem("cart"));
+    if (storedCart) {
+      props.addToCart(storedCart);
+    }
+  }, []);
 
   function handleClose() {
-    setShow(false);
+    if(show){
+
+      setShow(false);
+    }
+
   }
   
+
+
+  function handleShow() {
+    if(show){
+
+      setShow(true);
+    }
+  }
+
+
+
+
+  
   function AddToCart() {
-    props.addToCart([...props.cart, selectedCard])
-    console.log("Added to cart")
+    const updatedCart = [...props.cart, selectedCard];
+    props.addToCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart)); // Save the updatedCart array to local storage
+    console.log("Added to cart");
+    handleClose();
   }
 
 
@@ -37,40 +63,15 @@ function Main(props) {
     electronicsGroups.push(electronics.slice(i, i + 8));
   }
   
-  // Function to handle next button click
-  const handleNextClick = () => {
-
-    setStartDisplay(startDisplay + 3)
-    setEnddisplay(enddisplay + 3)
-  };
-
-  // Function to handle previous button click
-  const handlePrevClick = () => {
-    //  setVisibleIndex(visibleIndex - 1);
-    setStartDisplay(startDisplay - 3)
-    setEnddisplay(enddisplay - 3)
-  };
   
-
-
-
-  let GroupOfElectronics = electronics.slice(startDisplay, enddisplay)
   
   return (
     <div style={{ width: '100%', }}>
       <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-        <h2 style={{ alignSelf: 'flex-start', marginLeft: '50px' }}>Electronics</h2>
-        <div style={{ display: 'flex', gap: '10px', width: "100%", justifyContent: "center" }}>
-          {/* Arrow button to show previous content */}
+        <h2 style={{ alignSelf: 'flex-start', marginLeft: '40px' }}>{electronics.length > 0 && "Electronics"}</h2>
+        <div style={{ display: "flex", gap: "10px", display: "flex", overflowX: "auto"}}>
 
-          {/* Content to be displayed */}
-
-
-          {/* Iterate over each group in electronicsGroups */}
-          {startDisplay == 0 ? <></> : <button style={{ alignSelf: 'center' }} onClick={handlePrevClick}>
-            <BsChevronLeft />
-          </button>}
-          {GroupOfElectronics.map((arr, index) => (
+          {electronics.map((arr, index) => (
             <CardF
               className="Card"
               arr={arr}
@@ -81,19 +82,12 @@ function Main(props) {
             />
           ))}
 
-
-          {/* Arrow button to show next content */}
-
-          {startDisplay >= electronics.length - 3 ? <></> : <button style={{ alignSelf: 'center' }} onClick={handleNextClick}>
-            <BsChevronRight />
-          </button>}
-
         </div>
       </div>
 
       <div style={{ display: "flex", gap: "10px", display: "flex", flexDirection: "column" }}>
-        <h2 style={{ alignSelf: "flex-start", marginLeft: "50px" }}>Clothes</h2>
-        <div style={{ display: "flex", gap: "10px", display: "flex", }}>
+        <h2 style={{ alignSelf: "flex-start", marginLeft: '50px'  }}>{clothes.length > 0 && "Clothes"}</h2>
+        <div style={{ display: "flex", gap: "10px", display: "flex", overflowX: "auto",height:"100%" }}>
           {clothes.map((arr, index) => (
             <CardF className="Card" arr={arr} key={arr.key} index={index + 1} setShow={setShow} setSelectedCard={setSelectedCard} />
           ))}
@@ -101,7 +95,7 @@ function Main(props) {
       </div>
 
       <div style={{ display: "flex", gap: "10px", display: "flex", flexDirection: "column" }}>
-        <h2 style={{ alignSelf: "flex-start", marginLeft: "50px" }}>books</h2>
+        <h2 style={{ alignSelf: "flex-start", marginLeft: "50px" }}>{books.length > 0 && "Books"}</h2>
         <div style={{ display: "flex", gap: "10px", display: "flex", overflowX: "auto" }}>
           {books.map((arr, index) => (
             <CardF className="Card" arr={arr} key={arr.key} index={index + 1} setShow={setShow} setSelectedCard={setSelectedCard} />
@@ -110,7 +104,7 @@ function Main(props) {
       </div>
 
       <div style={{ display: "flex", gap: "10px", display: "flex", flexDirection: "column" }}>
-        <h2 style={{ alignSelf: "flex-start", marginLeft: "50px" }}>Games</h2>
+        <h2 style={{ alignSelf: "flex-start", marginLeft: "50px" }}>{games.length > 0 && "Games"}</h2>
         <div style={{ display: "flex", gap: "10px", display: "flex", overflowX: "auto" }}>
           {games.map((arr, index) => (
             <CardF className="Card" arr={arr} key={arr.key} index={index + 1} setShow={setShow} setSelectedCard={setSelectedCard} />
@@ -120,36 +114,36 @@ function Main(props) {
       {/* {------------------------------------------------------------------------------------------------------} */}
       {selectedCard && (
        
-        <Modal size='xl' show={show} onHide={handleClose}  style={{height:"100%"}}>
+        <Modal size="xl"  show={show} onHide={handleClose}  style={{height:"95vh", width:"100vw", margin:"auto"}}>
           <Modal.Header closeButton>
 
-            <Modal.Title style={{ fontSize: "20px",textAlign:"center" }}>{selectedCard.title}</Modal.Title>
+            <Modal.Title></Modal.Title>
           </Modal.Header>
           <Modal.Body style={{ width:"100%", border:"1px solid black", display:"flex",justifyContent:"center"}}>
-                  <div style={{height:"fit-content",width:"fit-content",display:"flex",flexDirection:"column", alignItems:"center"}}>
-                   <div style={{display:"flex",width:"100%",margin:"10px"}}>
-                    <img src={selectedCard.image} style={{ width: "500px" }}></img>
-                    <h1>${selectedCard.price}</h1>
+                  <div style={{height:"fit-content",width:"fit-content",display:"flex",flexDirection:"column", alignItems:"center" }}>
+                   <div style={{display:"flex",width:"80%",margin:"10px", display:"flex",justifyContent:"space-around",   alignItems:"center"}}>
+                    <img src={selectedCard.Image} style={{ width:"100%",height:"300px" , objectFit:"contain"}}></img>
+                    <div style={{display:"flex",width:"40%", flexDirection:"column", height:"320px", textAlign:"center",justifyContent:"space-between",padding:"1px" }}>
+
+                    <h1 style={{ fontSize: "20px",textAlign:"center" }}>{selectedCard.Title}</h1>
+                    <h1>{`$${selectedCard.Price}.00`}</h1>
+                    </div>
                     </div> 
-            {typeof selectedCard.description ==="string" && 
-                  <div style={{display:"flex",justifyContent:"space-between"}}>
-                  <Container fluid style={{border:"5px solid blue"}}>
+            {typeof selectedCard.Description ==="string" && 
                 
-                    {selectedCard.description.split(",").slice(0,Math.floor(selectedCard.description.split(",").length/2)).map((description, index) => (
-                      <li style={{width:"400px"}} key={index}>{description}</li>
-                      ))} 
+                  <Container fluid style={{textAlign:"center", width:"100%",}}>
+                
+                   
+                      <p style={{width:"70%",margin:"auto"}}>{selectedCard.Description}</p>
+                     
                       </Container>
-                      <Container fluid style={{border:"5px solid red"}}>
-                      {selectedCard.description.split(",").slice(Math.floor(selectedCard.description.split(",").length/2)).map((description, index) => (
-                        <li style={{width:"400px"}} key={index}>{description}</li>
-                        ))} 
-                        </Container>
-                        </div>
+                     
+                       
                       }
                         </div>
             {/* {selectedCard.description} */}
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer style={{position:"sticky",bottom:"0", backgroundColor:"white"}}>
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
@@ -159,6 +153,11 @@ function Main(props) {
           </Modal.Footer>
         </Modal>
       )}
+
+
+  
+  
+
 
     </div>
   );

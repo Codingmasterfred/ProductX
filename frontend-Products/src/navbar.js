@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
@@ -6,8 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useMediaQuery } from 'react-responsive';
-import { useAuth0 } from "@auth0/auth0-react"
+
 
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
@@ -16,42 +15,120 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 function NavBar1(props) {
 
-  const {
-    loginWithRedirect,
-    user,
-    logout,
-  } = useAuth0()
+  const [SearchItem, setSearchItem] = useState("")
+
+
 
   function Redirect() {
-    if (user) {
-      logout()
+    if (props.user) {
+      props.logout()
     } else {
-      loginWithRedirect()
+      props.loginWithRedirect()
     }
   }
 
-  const isForPhone = useMediaQuery({ maxWidth: 418 }); // Adjust the breakpoint as needed
-  const isSmallScreen = useMediaQuery({ maxWidth: 727, }); // Adjust the breakpoint as needed
-  const isSmallComputerScreen = useMediaQuery({ maxWidth: 992, }); // Adjust the breakpoint as needed
-  const iaLargeComputerScreen = useMediaQuery({ maxWidth: 1920 }); // Adjust the breakpoint as needed
+
+  function SearchFunction(e) {
+    e.preventDefault()
+    console.log(SearchItem.length > 0, "true or false")
+    if (SearchItem.length > 0) {
+      console.log("Passed")
+
+      let NewProductArray = props.LocalProductsArray.filter(searchItem => searchItem.Title.includes(SearchItem))
+      if (NewProductArray === props.LocalProductsArray) {
+        console.log("keep the search the same")
+      } else {
+        props.setLocalProductsArray(NewProductArray)
+        console.log(props.LocalProductsArray, "reset")
+
+      }
+
+    } else {
+      console.log("Failed")
+      props.setLocalProductsArray(props.Products)
+    }
+    console.log(props.Products, "Products")
+  }
+
+  function filterCart(ItemToFilter) {
+    let newCart = props.cart.filter(item => item._id !== ItemToFilter._id);
+
+  // Update the local storage with the filtered cart
+  localStorage.setItem("cart", JSON.stringify(newCart));
+
+  // Update the component state with the filtered cart
+  props.addToCart(newCart);
+
+  }
+
+
+
   return (
     <>
-      {isForPhone && <Navbar expand="lg" style={{ border: "10px solid black", display: "flex", justifyContent: "space-evenly" }}>
+      {props.isForPhone && <Navbar expand="lg" style={{ border: "10px solid black", display: "flex", justifyContent: "space-evenly" }}>
         <Container fluid style={{ border: "1px solid black", justifyContent: "space-between", width: "100%" }}>
-          <Navbar.Brand href="#" style={{ fontSize: "30px", marginBottom: "5px" }}>Products</Navbar.Brand>
+          <Navbar.Brand href="#" style={{ fontSize: "30px", marginBottom: "5px" }}>{props.cart.length}
+
+            {['bottom'].map((placement) => (
+              <OverlayTrigger
+                rootClose="true"
+                trigger="click"
+                key={placement}
+                placement={placement}
+                overlay={
+                  <Popover id={`popover-positioned-${placement}`} style={{ minWidth: "100px" }}>
+                    <Popover.Header as="h3" className="text-center">Cart</Popover.Header>
+                    <Popover.Body>
+                      <ListGroup>
+                        {props.cart.map(arr => {
+                          return (
+                            <ListGroup.Item style={{ display: "flex" }} > <img width="30%" src={arr.Image}></img>
+                              <div style={{ width: "60%", marginLeft: "10px" }}>
+                                {arr.Title.split("").splice(0, 24)}
+                                <br></br>
+                                ${arr.Price}
+
+                              </div>
+                              <svg onClick={() => filterCart(arr)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                              </svg>
+                            </ListGroup.Item>
+                          )
+                        })
+                        }
+                      </ListGroup>
+                      <ListGroup>
+                        <Button style={{ margin: "5px auto" }}>Checkout</Button>
+                      </ListGroup>
+                    </Popover.Body>
+                  </Popover>
+                }
+              >
+                <Button variant="secondary">Products</Button>
+              </OverlayTrigger>
+            ))}</Navbar.Brand>
           <navbar style={{ padding: "0px", display: "flex", width: "160px", justifyContent: "space-evenly", alignItems: "center" }}>
             <Navbar.Toggle aria-controls="navbarScroll" style={{ height: "40px" }} />
-            <h2 style={{ marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "3px" }} onClick={Redirect}>{user ? "LogOut" : "Log in"}</h2>
+            <h2 style={{ marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "3px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
           </navbar>
           <Navbar.Collapse id="navbarScroll" >
             <Form className="d-flex">
-              <Form.Control
+              <Form.Control onSubmit={SearchFunction}
                 type="search"
                 placeholder="Search"
                 className="me-2"
                 aria-label="Search"
+                value={SearchItem}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  console.log(newValue, "hereee");
+                  setSearchItem(newValue);
+
+                }}
               />
-              <Button variant="outline-success">Search</Button>
+
+              <Button onClick={SearchFunction}>Search</Button>
+
             </Form>
             <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '300px', width: "100%", display: "flex", justifyContent: "center" }} navbarScroll>
               <Nav.Link href="#action1" style={{ fontSize: "20px" }}>Home</Nav.Link>
@@ -68,24 +145,71 @@ function NavBar1(props) {
       </Navbar>}
 
 
-      {isSmallComputerScreen && !isForPhone && !isSmallScreen && <>
+      {props.isSmallComputerScreen && !props.isForPhone && !props.isSmallScreen && <>
         <Navbar expand="lg" style={{ border: "10px solid black", display: "flex", flexDirection: "column" }}>
           <Container fluid style={{ border: "1px solid black", display: "flex", padding: "0px " }}>
-            <Navbar.Brand href="#" style={{ fontSize: "40px", maxWidth: "250px", marginBottom: "10px", alignText: "center", flex: ".5", marginLeft: "10px" }}>Products</Navbar.Brand>
+            <Navbar.Brand href="#" style={{ fontSize: "40px", maxWidth: "250px", marginBottom: "10px", alignText: "center", flex: ".5", marginLeft: "10px" }}>>{props.cart.length}
+
+              {['bottom'].map((placement) => (
+                <OverlayTrigger
+                  rootClose="true"
+                  trigger="click"
+                  key={placement}
+                  placement={placement}
+                  overlay={
+                    <Popover id={`popover-positioned-${placement}`} style={{ minWidth: "100px" }}>
+                      <Popover.Header as="h3" className="text-center">Cart</Popover.Header>
+                      <Popover.Body>
+                        <ListGroup>
+                          {props.cart.map(arr => {
+                            return (
+                              <ListGroup.Item style={{ display: "flex" }} > <img width="30%" src={arr.Image}></img>
+                                <div style={{ width: "60%", marginLeft: "10px" }}>
+                                  {arr.Title.split("").splice(0, 24)}
+                                  <br></br>
+                                  ${arr.Price}
+
+                                </div>
+                                <svg onClick={() => filterCart(arr)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                                </svg>
+                              </ListGroup.Item>
+                            )
+                          })
+                          }
+                        </ListGroup>
+                        <ListGroup>
+                          <Button style={{ margin: "5px auto" }}>Checkout</Button>
+                        </ListGroup>
+                      </Popover.Body>
+                    </Popover>
+                  }
+                >
+                  <Button variant="secondary">Products</Button>
+                </OverlayTrigger>
+              ))}</Navbar.Brand>
             {/* <Navbar.Toggle aria-controls="navbarScroll" style={{height:"40px"}}/> */}
 
             {/* <Navbar.Collapse id="navbarScroll" > */}
             <div style={{ display: "flex", alignItems: "center", gap: "30px", minWidth: "450px", flex: "3" }}>
               <Form className="d-flex" style={{ minWidth: "100px", flex: "3" }}>
-                <Form.Control
+                <Form.Control onSubmit={SearchFunction}
                   type="search"
                   placeholder="Search"
                   className="me-2"
                   aria-label="Search"
+                  value={SearchItem}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    console.log(newValue, "hereee");
+                    setSearchItem(newValue);
+
+                  }}
                 />
-                <Button variant="outline-success">Search</Button>
+
+                <Button onClick={SearchFunction}>Search</Button>
               </Form>
-              <h2 style={{ marginRight: "10px", marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={Redirect}>{user ? "LogOut" : "Log in"}</h2>
+              <h2 style={{ marginRight: "10px", marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
             </div>
           </Container>
           <Container fluid style={{ border: "1px solid black", justifyContent: "unset" }}>
@@ -106,24 +230,71 @@ function NavBar1(props) {
 
 
 
-      {isSmallScreen && !isForPhone ? (
+      {props.isSmallScreen && !props.isForPhone ? (
         <>
           <Navbar expand="lg" style={{ border: "10px solid black", display: "flex", justifyContent: "space-evenly" }}>
             <Container fluid style={{ border: "1px solid black", justifyContent: "space-between" }}>
-              <Navbar.Brand href="#" style={{ fontSize: "40px", marginBottom: "10px" }}>Products</Navbar.Brand>
+              <Navbar.Brand href="#" style={{ fontSize: "40px", marginBottom: "10px" }}>{props.cart.length}
+
+                {['bottom'].map((placement) => (
+                  <OverlayTrigger
+                    rootClose="true"
+                    trigger="click"
+                    key={placement}
+                    placement={placement}
+                    overlay={
+                      <Popover id={`popover-positioned-${placement}`} style={{ minWidth: "100px" }}>
+                        <Popover.Header as="h3" className="text-center">Cart</Popover.Header>
+                        <Popover.Body>
+                          <ListGroup>
+                            {props.cart.map(arr => {
+                              return (
+                                <ListGroup.Item style={{ display: "flex" }} > <img width="30%" src={arr.Image}></img>
+                                  <div style={{ width: "60%", marginLeft: "10px" }}>
+                                    {arr.Title.split("").splice(0, 24)}
+                                    <br></br>
+                                    ${arr.Price}
+
+                                  </div>
+                                  <svg onClick={() => filterCart(arr)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                                  </svg>
+                                </ListGroup.Item>
+                              )
+                            })
+                            }
+                          </ListGroup>
+                          <ListGroup>
+                            <Button style={{ margin: "5px auto" }}>Checkout</Button>
+                          </ListGroup>
+                        </Popover.Body>
+                      </Popover>
+                    }
+                  >
+                    <Button variant="secondary">Products</Button>
+                  </OverlayTrigger>
+                ))}</Navbar.Brand>
               <navbar style={{ display: "flex", width: "200px", justifyContent: "space-evenly", alignItems: "center" }}>
                 <Navbar.Toggle aria-controls="navbarScroll" style={{ height: "40px" }} />
-                <h2 style={{ marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={Redirect}>{user ? "LogOut" : "Log in"}</h2>
+                <h2 style={{ marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
               </navbar>
               <Navbar.Collapse id="navbarScroll" >
                 <Form className="d-flex">
-                  <Form.Control
+                  <Form.Control onSubmit={SearchFunction}
                     type="search"
                     placeholder="Search"
                     className="me-2"
                     aria-label="Search"
+                    value={SearchItem}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      console.log(newValue, "hereee");
+                      setSearchItem(newValue);
+
+                    }}
                   />
-                  <Button variant="outline-success">Search</Button>
+
+                  <Button onClick={SearchFunction}>Search</Button>
                 </Form>
                 <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '300px', width: "100%", display: "flex", justifyContent: "center" }} navbarScroll>
                   <Nav.Link href="#action1" style={{ fontSize: "20px" }}>Home</Nav.Link>
@@ -139,7 +310,7 @@ function NavBar1(props) {
             </Container>
           </Navbar>
         </>
-      ) : iaLargeComputerScreen && !isForPhone && !isSmallScreen && !isSmallComputerScreen && (
+      ) : props.iaLargeComputerScreen && !props.isForPhone && !props.isSmallScreen && !props.isSmallComputerScreen && (
         <>
           <Navbar expand="lg" style={{ border: "10px solid black", }}>
             <Container fluid style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width: "100%" }}>
@@ -147,20 +318,34 @@ function NavBar1(props) {
 
                 {['bottom'].map((placement) => (
                   <OverlayTrigger
+                    rootClose="true"
                     trigger="click"
                     key={placement}
                     placement={placement}
                     overlay={
-                      <Popover id={`popover-positioned-${placement}`}>
+                      <Popover id={`popover-positioned-${placement}`} style={{ minWidth: "100px" }}>
                         <Popover.Header as="h3" className="text-center">Cart</Popover.Header>
                         <Popover.Body>
                           <ListGroup>
-                           { props.cart.map(arr =>{
-                              return(
-                                <ListGroup.Item> <img src={arr.image}></img> ${arr.price} </ListGroup.Item>
+                            {props.cart.map(arr => {
+                              return (
+                                <ListGroup.Item style={{ display: "flex" }} > <img width="30%" src={arr.Image}></img>
+                                  <div style={{ width: "60%", marginLeft: "10px" }}>
+                                    {arr.Title.split("").splice(0, 24)}
+                                    <br></br>
+                                    ${arr.Price}
+
+                                  </div>
+                                  <svg onClick={() => filterCart(arr)} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                                  </svg>
+                                </ListGroup.Item>
                               )
-                           })
+                            })
                             }
+                          </ListGroup>
+                          <ListGroup>
+                            <Button style={{ margin: "5px auto" }}>Checkout</Button>
                           </ListGroup>
                         </Popover.Body>
                       </Popover>
@@ -185,17 +370,24 @@ function NavBar1(props) {
                   <Nav.Link href="#" style={{ fontSize: "20px" }}>Link</Nav.Link>
                 </Nav>
                 <div style={{ display: "flex", alignItems: "center", minWidth: "40%", justifyContent: "center", gap: "40px", flex: "1" }}>
-                  <Form className="d-flex" style={{ minWidth: "250px", flex: ".8" }}>
+                  <Form className="d-flex" style={{ minWidth: "250px", flex: ".8", }} onSubmit={SearchFunction} >
                     <Form.Control
-                      //  style={{textAlign:"center"}}
                       type="search"
                       placeholder="Search"
                       className="me-2"
                       aria-label="Search"
+                      value={SearchItem}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        console.log(newValue, "hereee");
+                        setSearchItem(newValue);
+
+                      }}
                     />
-                    <Button variant="outline-success">Search</Button>
+
+                    <Button variant="outline-success" onClick={SearchFunction} >Search</Button>
                   </Form>
-                  <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={Redirect}>{user ? "LogOut" : "Log in"}</h2>
+                  <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
                 </div>
               </Navbar.Collapse>
             </Container>

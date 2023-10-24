@@ -19,8 +19,10 @@ try{
     res.json(ProductFromDatabase)
 }catch(error){
     console.error(error.message)
-    mongoose.disconnect()
+   
     res.send({message: "error from get route /"})
+}finally{
+    mongoose.disconnect()
 }
 })
 
