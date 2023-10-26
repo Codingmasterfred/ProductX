@@ -4,7 +4,7 @@
 function FormForSmallComputer(props){
     return(
         <>
-        <form type="submit" onSubmit={props.Submit} style={{ display: "flex", flexDirection:"column",alignItems:"center",border:"1px solid red" }}>
+        <form type="submit" onSubmit={props.Submit} style={{ display: "flex", flexDirection:"column",alignItems:"center" }}>
          <div style={{border:"1px solid black",width:"80%",display:"flex",justifyContent:"space-evenly"}}> <label style={props.labelStyleForMediumAdmin} htmlFor="Title"><input type="text" placeholder="Title" id="Title" onChange={props.onchangeTitle}></input></label>
           <label style={props.labelStyleForMediumAdmin} htmlFor="Description"><input type="text" placeholder="Description" id="Description" onChange={props.onchangeDescription}></input></label>
           <label style={props.labelStyleForMediumAdmin} htmlFor="Price"><input type="text" placeholder="Price" id="Price" onChange={props.onchangePrice}></input></label></div>
