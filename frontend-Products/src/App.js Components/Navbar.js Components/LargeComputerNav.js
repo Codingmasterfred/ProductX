@@ -10,6 +10,15 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
 function LargeComputerNav(props){
+
+  function Redirect() {
+    if (props.user) {
+      props.logout()
+    } else {
+      props.loginWithRedirect()
+    }
+  }
+  
     return(
         <Navbar expand="lg" style={{ border: "10px solid black", }}>
         <Container fluid style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width: "100%" }}>
@@ -86,7 +95,7 @@ function LargeComputerNav(props){
 
                 <Button variant="outline-success" onClick={props.SearchFunction} >Search</Button>
               </Form>
-              <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={props.loginWithRedirect}>{props.user ? "LogOut" : "Log in"}</h2>
+              <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
             </div>
           </Navbar.Collapse>
         </Container>
