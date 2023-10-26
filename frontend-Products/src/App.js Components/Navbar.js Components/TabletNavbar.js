@@ -55,7 +55,7 @@ function TabletNavbar(props){
             ))}</Navbar.Brand>
           <navbar style={{ display: "flex", width: "200px", justifyContent: "space-evenly", alignItems: "center" }}>
             <Navbar.Toggle aria-controls="navbarScroll" style={{ height: "40px" }} />
-            <h2 style={{ marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={props.Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+            <h2 style={{ marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={props.loginWithRedirect}>{props.user ? "LogOut" : "Log in"}</h2>
           </navbar>
           <Navbar.Collapse id="navbarScroll" >
           <Form className="d-flex" style={{ minWidth: "250px", flex: ".8", }} onSubmit={props.SearchFunction} >

@@ -86,7 +86,7 @@ function LargeComputerNav(props){
 
                 <Button variant="outline-success" onClick={props.SearchFunction} >Search</Button>
               </Form>
-              <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={props.Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+              <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={props.loginWithRedirect}>{props.user ? "LogOut" : "Log in"}</h2>
             </div>
           </Navbar.Collapse>
         </Container>

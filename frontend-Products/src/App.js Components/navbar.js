@@ -52,25 +52,25 @@ function NavBar1(props) {
     <>
     {/* Navbar for phones */}
       {props.isForPhone &&
-        <PhoneNavbar cart={props.cart} filterCart={filterCart} Redirect={props.Redirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+        <PhoneNavbar cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
       }
 
 {/* navbar for small computer screens */}
       {props.isSmallComputerScreen && !props.isForPhone && !props.isSmallScreen &&
         <>
-          <SmallComputerNav cart={props.cart} filterCart={filterCart} Redirect={props.Redirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+          <SmallComputerNav cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
         </>}
 
 
 {/* navbar for tablet */}
       {props.isSmallScreen && !props.isForPhone ? (
         <>
-          <TabletNavbar cart={props.cart} filterCart={filterCart} Redirect={props.Redirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+          <TabletNavbar cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
         </>
         // navbar for Large screens 
       ) : props.iaLargeComputerScreen && !props.isForPhone && !props.isSmallScreen && !props.isSmallComputerScreen && (
         <>
-          <LargeComputerNav cart={props.cart} filterCart={filterCart} Redirect={props.Redirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+          <LargeComputerNav cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
         </>
       )}
     </>

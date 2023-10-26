@@ -77,7 +77,7 @@ function SmallComputerNav(props) {
 
             <Button onClick={props.SearchFunction}>Search</Button>
           </Form>
-          <h2 style={{ marginRight: "10px", marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={props.Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+          <h2 style={{ marginRight: "10px", marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={props.loginWithRedirect}>{props.user ? "LogOut" : "Log in"}</h2>
         </div>
       </Container>
       <Container fluid style={{ border: "1px solid black", justifyContent: "unset" }}>

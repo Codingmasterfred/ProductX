@@ -56,7 +56,7 @@ function PhoneNavbar(props){
             ))}</Navbar.Brand>
           <navbar style={{ padding: "0px", display: "flex", width: "160px", justifyContent: "space-evenly", alignItems: "center" }}>
             <Navbar.Toggle aria-controls="navbarScroll" style={{ height: "40px" }} />
-            <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "3px" }} onClick={props.Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+            <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "3px" }} onClick={props.loginWithRedirect}>{props.user ? "LogOut" : "Log in"}</h2>
           </navbar>
           <Navbar.Collapse id="navbarScroll" >
           <Form className="d-flex" style={{ minWidth: "250px", flex: ".8", }} onSubmit={props.SearchFunction} >
