@@ -5,7 +5,7 @@ const app = express()
 const cors = require("cors")
 app.use(cors())
 const mongoose = require('mongoose');
-const Product = require("./databasestuff/products")
+const Product = require("./Schemas/products")
 app.use(express.json())
 const seedData = require("./seed")
 // app.use(express.urlencoded({ entended:true}))

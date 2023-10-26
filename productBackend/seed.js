@@ -1,6 +1,6 @@
 // getting-started.js
 const mongoose = require('mongoose');
-const Product = require("./databasestuff/products")
+const Product = require("./Schemas/products")
 require("dotenv").config()
 
 async function seed() {

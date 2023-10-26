@@ -12,7 +12,7 @@ function CardF(props){
 
     return ( 
     
-    <Card style={{ flex:"1",minWidth:"300px", height:"330px", justifyContent:"center"  }} onClick={onCardClick}>
+    <Card  style={{ flex:"1",minWidth:"300px", height:"330px", justifyContent:"center"  }} onClick={onCardClick}>
     <p>{props.index}</p>
   <Card.Img variant="top" src={props.arr.Image} style={{height:"40%",objectFit:"contain"}}/>
   <Card.Body>
