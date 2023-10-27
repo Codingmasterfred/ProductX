@@ -57,14 +57,14 @@ function Main(props) {
   
   
   return (
-    <div style={{ width: '100%', }}>
-      <ElectronicCards electronics={electronics} setSelectedCard={setSelectedCard} setShow={setShow}/>
+    <div id="mainContainer" style={{ width: '100%', }}>
+      <ElectronicCards electronics={electronics} setSelectedCard={setSelectedCard} setShow={setShow} CategoryClicked={props.CategoryClicked}/>
 
-      <BookCards books={books} setSelectedCard={setSelectedCard} setShow={setShow}/>
+      <BookCards books={books} setSelectedCard={setSelectedCard} setShow={setShow} CategoryClicked={props.CategoryClicked}/>
 
-      <ClothesCards clothes={clothes} setSelectedCard={setSelectedCard} setShow={setShow}/>
+      <ClothesCards clothes={clothes} setSelectedCard={setSelectedCard} setShow={setShow} CategoryClicked={props.CategoryClicked}/>
 
-      <GameCards games={games} setSelectedCard={setSelectedCard} setShow={setShow}/>
+      <GameCards games={games} setSelectedCard={setSelectedCard} setShow={setShow} CategoryClicked={props.CategoryClicked}/>
 
       
       {selectedCard && (

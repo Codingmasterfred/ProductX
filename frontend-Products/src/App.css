@@ -1,42 +1,58 @@
+
+body{
+  background-image: radial-gradient(blue, aqua);
+}
+
 .App {
   text-align: center;
   /* background-image: url(../public/background.png); */
-  height: 100vh;
+  height: 100%;
   width:100%;
   /* background-repeat: no-repeat; */
   background-size: contain;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+#navbarContainer{
+  background-image: linear-gradient(aqua, blue);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+#AppContainer{
+  background-image: radial-gradient(blue, aqua);
+  
+}
+
+#mainContainer{
+  padding:20px
+
+}
+
+/* width */
+::-webkit-scrollbar {
+  width:   0px;
+  border-color: black;
   }
+  
+  /* Track */
+
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    border:1px solid black;
+  background: aqua;
+  border-radius: 10px;
 }
 
-
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+#SearchBars{
+  color:white;
+    border-color:white;
   }
-  to {
-    transform: rotate(360deg);
+
+  #SearchBars:hover{
+    color:black;
+    background-color: aqua;
   }
-}
 
-.navbar .nav-link::after{
-display:"none"
-}
-
-.dropdown-toggle::after {
-  display: none
-}
+  .SignIn{
+    cursor: pointer;
+  }

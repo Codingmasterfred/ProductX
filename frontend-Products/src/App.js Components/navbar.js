@@ -4,35 +4,30 @@ import PhoneNavbar from "./Navbar.js Components/PhoneNavbar";
 import TabletNavbar from "./Navbar.js Components/TabletNavbar";
 import SmallComputerNav from "./Navbar.js Components/SmallComputerNav";
 import LargeComputerNav from "./Navbar.js Components/LargeComputerNav";
+import "../App.css"
 
 
 function NavBar1(props) {
 
   const [SearchItem, setSearchItem] = useState("")
 
-
   function SearchFunction(e) {
-    e.preventDefault()
-    console.log(SearchItem.length > 0, "true or false")
+    e.preventDefault();
+    props.setCategoryClicked(false)
+
     if (SearchItem.length > 0) {
-      console.log("Passed")
+      const searchTerm = SearchItem.toLowerCase();
+      const newProductArray = props.Products.filter(searchItem =>
+        searchItem.Title.toLowerCase().includes(searchTerm)
+      );
 
-      let NewProductArray = props.LocalProductsArray.filter(searchItem => searchItem.Title.includes(SearchItem))
-      if (NewProductArray === props.LocalProductsArray) {
-        console.log("keep the search the same")
-      } else {
-        props.setLocalProductsArray(NewProductArray)
-        console.log(props.LocalProductsArray, "reset")
-
-      }
-
+      props.setLocalProductsArray(newProductArray);
+      console.log("Search results:", newProductArray);
     } else {
-      console.log("Failed")
-      props.setLocalProductsArray(props.Products)
+      props.setLocalProductsArray(props.Products);
+      console.log("Reset to original data:", props.Products);
     }
-    console.log(props.Products, "Products")
   }
-
 
 
   function filterCart(ItemToFilter) {
@@ -46,34 +41,90 @@ function NavBar1(props) {
 
   }
 
+  // filter base off what category you click in the navbar Category tab
+  function FilterClickedCategory(category) {
+    let ClickedCategory = props.Products.filter(product => product.Category === category)
+    props.setLocalProductsArray(ClickedCategory)
+    props.setCategoryClicked(true)
+
+  }
+
 
 
   return (
-    <>
-    {/* Navbar for phones */}
+    <div id="navbarContainer">
+      {/* Navbar for phones */}
       {props.isForPhone &&
-        <PhoneNavbar cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} logout={props.logout} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+        <PhoneNavbar
+          cart={props.cart}
+          filterCart={filterCart}
+          loginWithRedirect={props.loginWithRedirect}
+          logout={props.logout}
+          user={props.user}
+          SearchFunction={SearchFunction}
+          setSearchItem={setSearchItem}
+          SearchItem={SearchItem}
+          LocalProductsArray={props.LocalProductsArray}
+          setLocalProductsArray={props.setLocalProductsArray}
+          FilterClickedCategory={FilterClickedCategory}
+        />
       }
 
-{/* navbar for small computer screens */}
+      {/* navbar for small computer screens */}
       {props.isSmallComputerScreen && !props.isForPhone && !props.isSmallScreen &&
         <>
-          <SmallComputerNav cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} logout={props.logout} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+          <SmallComputerNav
+            cart={props.cart}
+            filterCart={filterCart}
+            loginWithRedirect={props.loginWithRedirect}
+            logout={props.logout}
+            user={props.user}
+            SearchFunction={SearchFunction}
+            setSearchItem={setSearchItem}
+            SearchItem={SearchItem}
+            LocalProductsArray={props.LocalProductsArray}
+            setLocalProductsArray={props.setLocalProductsArray}
+            FilterClickedCategory={FilterClickedCategory}
+          />
         </>}
 
 
-{/* navbar for tablet */}
+      {/* navbar for tablet */}
       {props.isSmallScreen && !props.isForPhone ? (
         <>
-          <TabletNavbar cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} logout={props.logout} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+          <TabletNavbar
+            cart={props.cart}
+            filterCart={filterCart}
+            loginWithRedirect={props.loginWithRedirect}
+            logout={props.logout}
+            user={props.user}
+            SearchFunction={SearchFunction}
+            setSearchItem={setSearchItem}
+            SearchItem={SearchItem}
+            LocalProductsArray={props.LocalProductsArray}
+            setLocalProductsArray={props.setLocalProductsArray}
+            FilterClickedCategory={FilterClickedCategory}
+          />
         </>
         // navbar for Large screens 
       ) : props.iaLargeComputerScreen && !props.isForPhone && !props.isSmallScreen && !props.isSmallComputerScreen && (
         <>
-          <LargeComputerNav cart={props.cart} filterCart={filterCart} loginWithRedirect={props.loginWithRedirect} logout={props.logout} user={props.user} SearchFunction={SearchFunction} setSearchItem={setSearchItem} SearchItem={SearchItem} />
+          <LargeComputerNav
+            cart={props.cart}
+            filterCart={filterCart}
+            loginWithRedirect={props.loginWithRedirect}
+            logout={props.logout}
+            user={props.user}
+            SearchFunction={SearchFunction}
+            setSearchItem={setSearchItem}
+            SearchItem={SearchItem}
+            LocalProductsArray={props.LocalProductsArray}
+            setLocalProductsArray={props.setLocalProductsArray}
+            FilterClickedCategory={FilterClickedCategory}
+          />
         </>
       )}
-    </>
+    </div>
 
 
   );

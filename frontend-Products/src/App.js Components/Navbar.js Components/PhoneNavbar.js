@@ -60,12 +60,12 @@ function PhoneNavbar(props){
                   </Popover>
                 }
               >
-                <Button variant="secondary">Products</Button>
+                <Button variant="secondary" style={{backgroundColor:"aqua",color:"black"}}>Products</Button>
               </OverlayTrigger>
             ))}</Navbar.Brand>
           <navbar style={{ padding: "0px", display: "flex", width: "160px", justifyContent: "space-evenly", alignItems: "center" }}>
             <Navbar.Toggle aria-controls="navbarScroll" style={{ height: "40px" }} />
-            <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "3px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+            <h2 className='SignIn' style={{ marginTop: "6px", borderRadius: "20%", padding: "3px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
           </navbar>
           <Navbar.Collapse id="navbarScroll" >
           <Form className="d-flex" style={{ minWidth: "250px", flex: ".8", }} onSubmit={props.SearchFunction} >
@@ -83,17 +83,21 @@ function PhoneNavbar(props){
                   }}
                 />
 
-              <Button onClick={props.SearchFunction}>Search</Button>
+              <Button id="SearchBars"  onClick={props.SearchFunction}>Search</Button>
 
             </Form>
             <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '300px', width: "100%", display: "flex", justifyContent: "center" }} navbarScroll>
-              <Nav.Link href="#action1" style={{ fontSize: "20px" }}>Home</Nav.Link>
-              <Nav.Link href="#" style={{ fontSize: "20px" }}>Link</Nav.Link>
-              <NavDropdown style={{ fontSize: "20px", width: "100%" }} title="Dropdown" >
-                <NavDropdown.Item href="#action3" >Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
+              <Nav.Link href="/" style={{margin:"auto", fontSize: "20px"}}>Home</Nav.Link>
+              <Nav.Link href="https://www.linkedin.com/in/fredrick-gentry-43680725b/" style={{margin:"auto", fontSize: "20px" }}>Contact Me</Nav.Link>
+              <NavDropdown style={{ margin:"auto",fontSize: "20px",}} title="Categories" >
+              <NavDropdown.Item href="#Electronics" onClick={()=>props.FilterClickedCategory("electronics")} >Electronics</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
+                <NavDropdown.Item href="#Books" onClick={()=>props.FilterClickedCategory("books")}>Books</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Clothes" onClick={()=>props.FilterClickedCategory("clothes")}>Clothes</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Games" onClick={()=>props.FilterClickedCategory("games")}>Games</NavDropdown.Item>
+                
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

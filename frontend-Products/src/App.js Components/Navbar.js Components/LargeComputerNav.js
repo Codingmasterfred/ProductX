@@ -18,9 +18,11 @@ function LargeComputerNav(props){
       props.loginWithRedirect()
     }
   }
+
+  
   
     return(
-        <Navbar expand="lg" style={{ border: "10px solid black", }}>
+        <Navbar expand="lg" style={{  }}>
         <Container fluid style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", width: "100%" }}>
           <Navbar.Brand href="#" style={{ fontSize: "40px", marginLeft: "30px", marginBottom: "10px", flex: "1" }}>{props.cart.length}
 
@@ -59,7 +61,7 @@ function LargeComputerNav(props){
                   </Popover>
                 }
               >
-                <Button variant="secondary">Products</Button>
+                <Button variant="secondary" style={{backgroundColor:"aqua",color:"black"}}>Products</Button>
               </OverlayTrigger>
             ))}
 
@@ -68,14 +70,18 @@ function LargeComputerNav(props){
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
             <Nav style={{ Height: '100px', width: "40%", display: "flex", justifyContent: "space-evenly" }} navbarScroll>
-              <Nav.Link href="#action1" style={{ fontSize: "20px" }}>Home</Nav.Link>
-              <NavDropdown style={{ fontSize: "20px" }} title="Dropdown" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
+              <Nav.Link href="/" style={{ fontSize: "20px" }}>Home</Nav.Link>
+              <NavDropdown style={{ fontSize: "20px" }} title="Categories" id="navbarScrollingDropdown">
+                <NavDropdown.Item href="#Electronics" onClick={()=>props.FilterClickedCategory("electronics")} >Electronics</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
+                <NavDropdown.Item href="#Books" onClick={()=>props.FilterClickedCategory("books")}>Books</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Clothes" onClick={()=>props.FilterClickedCategory("clothes")}>Clothes</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Games" onClick={()=>props.FilterClickedCategory("games")}>Games</NavDropdown.Item>
+
               </NavDropdown>
-              <Nav.Link href="#" style={{ fontSize: "20px" }}>Link</Nav.Link>
+              <Nav.Link href="https://www.linkedin.com/in/fredrick-gentry-43680725b/" style={{ fontSize: "20px" }}>Contact Me</Nav.Link>
             </Nav>
             <div style={{ display: "flex", alignItems: "center", minWidth: "40%", justifyContent: "center", gap: "40px", flex: "1" }}>
               <Form className="d-flex" style={{ minWidth: "250px", flex: ".8", }} onSubmit={props.SearchFunction} >
@@ -93,9 +99,9 @@ function LargeComputerNav(props){
                   }}
                 />
 
-                <Button variant="outline-success" onClick={props.SearchFunction} >Search</Button>
+                <Button id="SearchBars"  onClick={props.SearchFunction}  >Search</Button>
               </Form>
-              <h2 style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+              <h2 className='SignIn' style={{ marginTop: "6px", borderRadius: "20%", padding: "5px", width: "120px", whiteSpace: 'nowrap' }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
             </div>
           </Navbar.Collapse>
         </Container>

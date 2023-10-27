@@ -15,7 +15,7 @@ function FormForLargeComputer(props){
         <select onChange={props.Selected} style={props.selectionStyle}>
           <option value="">Delete A Product</option>
           {
-            props.Products.map(arr => {
+            props.LocalProductsArray.map(arr => {
               return (
                 <option onClick={() => props.setSelectedProduct(arr)} value={arr._id}>{arr.Title}</option>
               )
@@ -28,7 +28,7 @@ function FormForLargeComputer(props){
         <select onChange={props.Selected} style={props.selectionStyle}>
           <option value="">Update A Product</option>
           {
-            props.Products.map(arr => {
+            props.LocalProductsArray.map(arr => {
               return (
                 <>
                   <option value={arr._id}>{arr.Title}</option>

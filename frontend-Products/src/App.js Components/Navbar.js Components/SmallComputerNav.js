@@ -60,7 +60,7 @@ function SmallComputerNav(props) {
               }
             >
               {/* nested button which trigger the overlay */}
-              <Button variant="secondary">Products</Button>
+              <Button variant="secondary" style={{backgroundColor:"aqua",color:"black"}}>Products</Button>
             </OverlayTrigger>
           ))}</Navbar.Brand>
         {/* <Navbar.Toggle aria-controls="navbarScroll" style={{height:"40px"}}/> */}
@@ -84,20 +84,24 @@ function SmallComputerNav(props) {
               }}
             />
 
-            <Button onClick={props.SearchFunction}>Search</Button>
+            <Button id="SearchBars"  onClick={props.SearchFunction}>Search</Button>
           </Form>
-          <h2 style={{ marginRight: "10px", marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
+          <h2 className='SignIn' style={{ marginRight: "10px", marginTop: "6px", border: "1px solid black", borderRadius: "20%", padding: "5px" }} onClick={Redirect}>{props.user ? "LogOut" : "Log in"}</h2>
         </div>
       </Container>
       <Container fluid style={{ border: "1px solid black", justifyContent: "unset" }}>
         <Nav style={{ display: "flex", justifyContent: "unset", width: "100%", flexDirection: "row", justifyContent: "space-evenly", maxHeight: "50px" }} >
-          <Nav.Link href="#action1" style={{ fontSize: "20px" }}>Home</Nav.Link>
-          <Nav.Link href="#" style={{ fontSize: "20px" }}>Link</Nav.Link>
-          <NavDropdown style={{ fontSize: "20px" }} title="Dropdown" >
-            <NavDropdown.Item href="#action3" >Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
+          <Nav.Link href="/" style={{ fontSize: "20px" }}>Home</Nav.Link>
+          <Nav.Link href="https://www.linkedin.com/in/fredrick-gentry-43680725b/" style={{ fontSize: "20px" }}>Contact Me</Nav.Link>
+          <NavDropdown style={{ fontSize: "20px" }} title="Categories" >
+          <NavDropdown.Item href="#Electronics" onClick={()=>props.FilterClickedCategory("electronics")} >Electronics</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Books" onClick={()=>props.FilterClickedCategory("books")}>Books</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Clothes" onClick={()=>props.FilterClickedCategory("clothes")}>Clothes</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#Games" onClick={()=>props.FilterClickedCategory("games")}>Games</NavDropdown.Item>
+                
           </NavDropdown>
         </Nav>
       </Container>

@@ -11,13 +11,14 @@ import FormForTablet from "./App.js Components/AdminForms/Tablet";
 import FormForSmallComputer from "./App.js Components/AdminForms/SmallComputers";
 import FormForPhone from "./App.js Components/AdminForms/Phone";
 import OffCanvas from "./App.js Components/OffCanvas";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
 
 
 
 function App() {
-  // Auth0 nuild in fuctions and variables
+  // Auth0 built in functions and variables
   const {
     loginWithPopup,
     loginWithRedirect,
@@ -26,19 +27,33 @@ function App() {
     isAuthenticated,
     getAccessTokenSilenty
   } = useAuth0()
+  
+  // Are the two arrays with all data from the get method the reason i have two is so i wont have any problem reseting the LocalProductsArray when needed 
+  const [LocalProductsArray, setLocalProductsArray] = useState([])
+  const [Products, setProducts] = useState([])
 
+  // is the checkout cart 
   const [cart, addToCart] = useState([])
+
+  // Shows admin form when needed 
   const [showForm, setShowForm] = useState(false)
+
+  // properties of each object 
   const [Title, setTitle] = useState("")
   const [Description, setDescription] = useState("")
   const [Price, setPrice] = useState("")
   const [Image, setImageUrl] = useState("")
   const [Category, setCategory] = useState("")
-  const [Products, setProducts] = useState([])
+
+  // is the id of the click card to assist with HTTP requests
   const [selectedProduct, setSelectedProduct] = useState("")
-  const [LocalProductsArray, setLocalProductsArray] = useState([])
+
+  // shows the for inside of the offcanvas when the Admin wants to update a item
   const [showCanvas, setShowCanvas] = useState(false);
+
+  // shows the canvas properties from the currentcanvasitem
   const [CurrentCanvasItem, setCurrentCanvasItem] = useState({})
+  // the properties
   const [CanvasTitle, setCanvasTitle] = useState("")
   const [CanvasDescription, setCanvasDescription] = useState("")
   const [CanvasPrice, setCanvasPrice] = useState(0)
@@ -51,6 +66,9 @@ function App() {
   const isSmallComputerScreen = useMediaQuery({ maxWidth: 992, }); // Adjust the breakpoint as needed
   const isForAdminMediumScreen = useMediaQuery({ maxWidth: 1277 })
   const iaLargeComputerScreen = useMediaQuery({ maxWidth: 1920 }); // Adjust the breakpoint as needed
+
+// to help change the styling of the page to fit on one category when the category button is clicked in the navbar
+  const[CategoryClicked,setCategoryClicked] = useState(false)
 
   // Get request to recieve all data from backend 
   useEffect(() => {
@@ -111,14 +129,8 @@ function App() {
     async function DeleteProduct() {
       try {
         let deletedItem = await axios.delete(`https://productbackend-5lj2.onrender.com/products/${selectedProduct}`)
-        let filterItem = Products.filter(arr => {
-          if (selectedProduct === arr._id) {
-            return false
-          } else {
-            return true
-          }
-        })
-        setLocalProductsArray(filterItem)
+        let updatedLocalProductsArray = LocalProductsArray.filter(item => item._id !== selectedProduct);
+        setLocalProductsArray(updatedLocalProductsArray)
         console.log("deletedItem", deletedItem.data)
       } catch (error) {
         console.error(error)
@@ -210,9 +222,13 @@ function App() {
           Price
 
         }
-
+        
         )
-
+        console.log(added,"added")
+        const newProduct = added.data;
+        const updatedLocalProductsArray = [...LocalProductsArray, newProduct];
+        setLocalProductsArray(updatedLocalProductsArray);
+  
         console.log(added)
       } catch (error) {
         console.error(error)
@@ -316,8 +332,9 @@ function App() {
   };
 
   return (
-    <div>
+    <div id="AppContainer">
       <NavBar1
+      setCategoryClicked={setCategoryClicked}
         LocalProductsArray={LocalProductsArray}
         setLocalProductsArray={setLocalProductsArray}
         setProducts={setProducts}
@@ -366,7 +383,7 @@ function App() {
                 buttonStyle={buttonStyle}
                 ShowCanvasForm={ShowCanvasForm}
                 labelStyle={labelStyle}
-                Products={Products}
+                LocalProductsArray={LocalProductsArray}
               />
             }
             {/* Admin Form for smaller screen sizes such as a small laptap */}
@@ -386,7 +403,7 @@ function App() {
                 buttonStyle={buttonStyle} 
                 ShowCanvasForm={ShowCanvasForm}
                 labelStyleForMediumAdmin={labelStyleForMediumAdmin}
-                Products={Products}
+                LocalProductsArray={LocalProductsArray}
                 buttonStyleForMediumAdmin={buttonStyleForMediumAdmin}
               />
             }
@@ -407,7 +424,7 @@ function App() {
                 buttonStyle={buttonStyle}
                 ShowCanvasForm={ShowCanvasForm}
                 labelStyleForMediumAdmin={labelStyleForMediumAdmin}
-                Products={Products}
+                LocalProductsArray={LocalProductsArray}
                 buttonStyleForSamllAdmin={buttonStyleForSamllAdmin}
               />
             }
@@ -427,23 +444,29 @@ function App() {
                 buttonStyle={buttonStyle}
                 ShowCanvasForm={ShowCanvasForm}
                 labelStyle={labelStyle}
-                Products={Products}
+                LocalProductsArray={LocalProductsArray}
                 buttonStyleForSamllAdmin={buttonStyleForSamllAdmin}
               />
             }
           </div>
 
         }
+        <Router>
+         <Routes>
+          <Route exact path="/" component={<Main/>} />
+         </Routes>
+         </Router>
         <Main
-          isSmallComputerScreen={isSmallComputerScreen}
-          isAuthenticated
-          isSmallScreen={isSmallScreen}
-          isForPhone={isForPhone}
-          Update={Update}
-          LocalProductsArray={LocalProductsArray}
-          setLocalProductsArray={setLocalProductsArray}
-          cart={cart}
-          addToCart={addToCart} Products={Products} />
+         CategoryClicked={CategoryClicked}
+           isSmallComputerScreen={isSmallComputerScreen}
+           isAuthenticated
+           isSmallScreen={isSmallScreen}
+           isForPhone={isForPhone}
+           Update={Update}
+           LocalProductsArray={LocalProductsArray}
+           setLocalProductsArray={setLocalProductsArray}
+           cart={cart}
+           addToCart={addToCart} Products={Products} />
 
 {/* OffCanvas that shows up when you are updating an product properties */}
         <OffCanvas

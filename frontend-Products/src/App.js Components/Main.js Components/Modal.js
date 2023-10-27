@@ -5,13 +5,13 @@ import Button from 'react-bootstrap/Button';
 
 function ProductsModal (props){
     return(
-        <Modal size="xl"  show={props.show} onHide={props.handleClose}  style={{height:"95vh", width:"100vw", margin:"auto"}}>
+        <Modal size="l"  show={props.show} onHide={props.handleClose}  style={{height:"95vh", width:"100vw", margin:"auto"}}>
         <Modal.Header closeButton>
 
           <Modal.Title></Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ width:"100%", display:"flex",justifyContent:"center"}}>
-                <div style={{height:"fit-content",width:"fit-content",display:"flex",flexDirection:"column", alignItems:"center",overflowY:"auto" }}>
+                <div style={{height:"fit-content",width:"100%",display:"flex",flexDirection:"column", alignItems:"center",overflowY:"auto" }}>
                  <div style={{height:"500px",maxHeight:"fit-content",display:"flex",width:"90%",margin:"10px",justifyContent:"space-around", alignItems:"center",flexDirection:"column"}}>
                   <img src={props.selectedCard.Image} style={{height:"fit-content",width:"100%",maxHeight:"300px" , objectFit:"contain"}}></img>
                   <div style={{display:"flex",width:"100%", flexDirection:"column", height:"fit-content", textAlign:"center",justifyContent:"space-between",padding:"1px"}}>
