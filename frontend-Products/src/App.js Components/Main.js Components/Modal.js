@@ -17,7 +17,7 @@ function ProductsModal (props){
                   <div style={{display:"flex",width:"100%", flexDirection:"column", height:"fit-content", textAlign:"center",justifyContent:"space-between",padding:"1px"}}>
 
                   <h1 style={{ fontSize:"18px",width:"100%", textOverflow: "ellipsis" , objectFit:"contain",wordBreak:"none"}}>{props.selectedCard.Title}</h1>
-                  <h1>{`$${props.selectedCard.Price}.00`}</h1>
+                  <h1>{props.selectedCard.length >= 4 ?props.selectedCard :`$${props.selectedCard.Price}.00`}</h1>
                   </div>__
           {typeof props.selectedCard.Description ==="string" && 
               
